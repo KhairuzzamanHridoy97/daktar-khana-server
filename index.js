@@ -29,6 +29,18 @@ async function run(){
           res.json(result)
         });
 
+        // admin check
+        app.get('/users/:email', async (req, res) => {
+          const email = req.params.email;
+          const query = { email: email };
+          const user = await usersCollection.findOne(query);
+          let isAdmin = false
+          if (user?.role === 'admin') {
+              isAdmin = true;
+          }
+          res.json({ admin: isAdmin });
+      })
+
         app.get('/appointments',async(req,res)=>{
           const email = req.query.email;
           const date = new Date( req.query.date).toLocaleDateString();
@@ -59,14 +71,12 @@ async function run(){
 
        // admin role setting
         app.put("/users/admin",async(req,res)=>{
-          
           const user = req.body;
           console.log('put',user)
           const filter = {email: user.email};
           const updateDoc ={$set:{role: 'admin'}};
           const result = await usersCollection.updateOne(filter,updateDoc);
           res.json(result);
-
         })
 
        
