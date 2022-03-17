@@ -20,6 +20,7 @@ async function run(){
         await client.connect();
         const database = client.db("daktar_portal")
         const  appointmentsCollection = database.collection('appointments') ;
+        const usersCollection = database.collection('users');
 
         app.post("/appointments",async(req,res)=>{
           const appointment = req.body;
@@ -37,6 +38,18 @@ async function run(){
           const cursor = appointmentsCollection.find(quary);
           const appointments = await cursor.toArray();
           res.json(appointments);
+        })
+
+        //for users
+        app.post('/users',async(req,res)=>{
+          const user = req.body;
+          const result = await usersCollection.insertOne(user);
+          res.json(result)
+        })
+
+        // update-insert (upsert)
+        app.put("/users",async(req,res)=>{
+          
         })
 
        
