@@ -26,6 +26,15 @@ async function run(){
           const result = await appointmentsCollection.insertOne(appointment);
           console.log(result);
           res.json(result)
+        });
+
+        app.get('/appointments',async(req,res)=>{
+          const email = req.query.email;
+          const quary = {email:email}
+          console.log(quary);
+          const cursor = appointmentsCollection.find(quary);
+          const appointments = await cursor.toArray();
+          res.json(appointments);
         })
 
        
