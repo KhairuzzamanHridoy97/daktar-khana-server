@@ -49,7 +49,13 @@ async function run(){
 
         // update-insert (upsert)
         app.put("/users",async(req,res)=>{
-          
+          const user = req.body;
+          console.log('put',user)
+          const filter = {email: user.email}
+          const options= {upsert:true};
+          const updateDoc = {$set:user};
+          const result = await usersCollection.updateOne(filter,updateDoc,options);
+          res.json(result);
         })
 
        
